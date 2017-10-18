@@ -1,6 +1,8 @@
 #!/bin/bash
 period=''
 location=/backups/local
+email=none@no.com
+
 # Check argument
 if [[ $# -eq 0 ]]
 then
@@ -96,6 +98,6 @@ then
 fi
 if [[ $dovzdump == true ]]
 then
-  ionice -c3 /usr/bin/vzdump -compress 1 -mode snapshot --dumpdir $location/$period -stdexcludes 0 -maxfiles $maxfiles -all $exclude -exclude-path $location'.+'
+  ionice -c3 /usr/bin/vzdump -compress 1 -mode snapshot --dumpdir $location/$period --mailto $email -stdexcludes 0 -maxfiles $maxfiles -all $exclude -exclude-path $location'.+'
   exit $?
 fi

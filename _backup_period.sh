@@ -1,5 +1,6 @@
 #!/bin/bash
 period=''
+location=/backups/local
 # Check argument
 if [[ $# -eq 0 ]]
 then
@@ -16,7 +17,7 @@ else
   fi
 fi
 # Error check
-if [[ $period == 'error' ]]  
+if [[ $period == 'error' ]]
 then
   echo ""
   echo "Error: $msg"
@@ -57,7 +58,7 @@ done
 echo "Excluding $exclude"
 
 # Do backup
-tar -czf /var/backups/localhost/$period/pvebackup_config_`hostname -s`_`date +%A`.tar.gz /root /etc 2> /dev/null
+tar -czf $location/$period/pvebackup_config_`hostname -s`_`date +%A`.tar.gz /root /etc 2> /dev/null
 dovzdump=true
 if [[ $period == 'weekly' || $period == 'monthly' ]]
 then
@@ -95,6 +96,6 @@ then
 fi
 if [[ $dovzdump == true ]]
 then
-  ionice -c3 /usr/bin/vzdump -compress 1 -mode snapshot -storage $period -stdexcludes 0 -maxfiles $maxfiles -all $exclude -exclude-path '/var/backups/localhost/.+'
+  ionice -c3 /usr/bin/vzdump -compress 1 -mode snapshot --dumpdir $location/$period -stdexcludes 0 -maxfiles $maxfiles -all $exclude -exclude-path $location'.+'
   exit $?
 fi
